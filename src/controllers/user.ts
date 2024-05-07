@@ -13,7 +13,7 @@ export const newUser = async (req: Request, res: Response) => {
     
     if(user){
         return res.status(400).json({
-            msg: `Ya existe un usuario con el nombre ${username}`
+            msg: `Ya existe un usuario con el nombre ${username} registrado en la BD`
         })
     }
     
