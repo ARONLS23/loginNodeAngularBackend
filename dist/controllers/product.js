@@ -9,12 +9,80 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProduct = void 0;
+exports.updateProduct = exports.postProduct = exports.deleteProduct = exports.getProductById = exports.getProduct = void 0;
 const product_1 = require("../models/product");
 const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listProductos = yield product_1.Product.findAll();
-    res.json({
-        listProductos
-    });
+    res.json(listProductos);
 });
 exports.getProduct = getProduct;
+const getProductById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const product = yield product_1.Product.findByPk(id);
+    if (product) {
+        res.json(product);
+    }
+    else {
+        res.status(404).json({
+            msg: `No existe un producto con el id ${id}`,
+        });
+    }
+});
+exports.getProductById = getProductById;
+const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const product = yield product_1.Product.findByPk(id);
+    if (!product) {
+        res.status(404).json({
+            msg: `No existe un producto con el id ${id}`,
+        });
+    }
+    else {
+        yield product.destroy();
+        res.json({
+            msg: "El producto fue eliminado con exito!",
+        });
+    }
+});
+exports.deleteProduct = deleteProduct;
+const postProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { body } = req;
+    try {
+        yield product_1.Product.create(body);
+        res.json({
+            msg: `El producto fue agregado con exito!`,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.json({
+            msg: `Upps ocurrio un error, comuniquese con soporte`,
+        });
+    }
+});
+exports.postProduct = postProduct;
+const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { body } = req;
+    const { id } = req.params;
+    try {
+        const product = yield product_1.Product.findByPk(id);
+        if (product) {
+            yield product.update(body);
+            res.json({
+                msg: "El producto fue actualziado con exito",
+            });
+        }
+        else {
+            res.status(404).json({
+                msg: `No existe un producto con el id ${id}`,
+            });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.json({
+            msg: `Upps ocurrio un error, comuniquese con soporte`,
+        });
+    }
+});
+exports.updateProduct = updateProduct;
