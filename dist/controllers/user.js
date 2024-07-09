@@ -22,7 +22,7 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_1.User.findOne({ where: { username: username } });
     if (user) {
         return res.status(400).json({
-            msg: `Ya existe un usuario con el nombre ${username}`
+            msg: `Ya existe un usuario con el nombre ${username} registrado en la BD`
         });
     }
     const hashedPassword = yield bcrypt_1.default.hash(password, 10);
